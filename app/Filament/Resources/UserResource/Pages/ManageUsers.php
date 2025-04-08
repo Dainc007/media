@@ -14,8 +14,9 @@ final class ManageUsers extends ManageRecords
 
     protected function getHeaderActions(): array
     {
+        //hide as it's not implemented yet.
         return [
-            Actions\CreateAction::make(),
+//            Actions\CreateAction::make(),
         ];
     }
 }
