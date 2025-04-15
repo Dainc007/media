@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
+use App\Livewire\ScanbotComponent;
 use App\Models\User;
+use DesignTheBox\BarcodeField\Forms\Components\BarcodeInput;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
@@ -32,6 +34,8 @@ final class UserResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required(),
+
+                SpatieMediaLibraryFileUpload::make('documents'),
             ]);
     }
 
@@ -43,16 +47,9 @@ final class UserResource extends Resource
                     ->collection('avatars')
                     ->circular()
                     ->extraImgAttributes(['loading' => 'lazy']),
-
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('avatar_url')
-                    ->wrap()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -69,7 +66,13 @@ final class UserResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()->visible(Auth::user()->id === 1),
                 Tables\Actions\DeleteAction::make()->visible(Auth::user()->id === 1),
+                Tables\Actions\Action::make('scan')
+                    ->button()
+                    ->color('success')
+                    ->icon('heroicon-o-camera')
+                    ->url(fn (User $record): string => '/quickstart')
             ])
+            ->actionsPosition(Tables\Enums\ActionsPosition::BeforeColumns)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

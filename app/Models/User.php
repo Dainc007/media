@@ -58,6 +58,13 @@ final class User extends Authenticatable implements FilamentUser, HasAvatar, Has
             ->nonQueued();
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('documents')
+            ->useDisk('public');
+    }
+
     public function getFilamentAvatarUrl(): ?string
     {
         $media = $this->getFirstMedia('avatars');
