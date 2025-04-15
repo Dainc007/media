@@ -56,12 +56,21 @@ final class User extends Authenticatable implements FilamentUser, HasAvatar, Has
             ->addMediaConversion('preview')
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
+
+        $this
+            ->addMediaConversion('thumb')
+            ->fit(Fit::Contain, 150, 150)
+            ->nonQueued();
     }
 
     public function registerMediaCollections(): void
     {
         $this
             ->addMediaCollection('documents')
+            ->useDisk('public');
+
+        $this
+            ->addMediaCollection('avatars')
             ->useDisk('public');
     }
 
