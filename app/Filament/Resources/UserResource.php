@@ -43,10 +43,6 @@ final class UserResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('avatar')
-                    ->collection('avatars')
-                    ->circular()
-                    ->extraImgAttributes(['loading' => 'lazy']),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
