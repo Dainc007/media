@@ -43,6 +43,10 @@ final class UserResource extends Resource
     {
         return $table
             ->columns([
+                SpatieMediaLibraryImageColumn::make('avatar_url')
+                    ->collection('avatars')
+                    ->conversion('preview')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
@@ -88,7 +92,7 @@ final class UserResource extends Resource
         return SpatieMediaLibraryFileUpload::make('avatars')
             ->responsiveImages()
             ->collection('avatars')
-            ->conversion('thumb')
+            ->conversion('preview')
             ->hiddenLabel()
             ->alignCenter()
             ->image()
@@ -96,12 +100,6 @@ final class UserResource extends Resource
             ->circleCropper()
             ->avatar()
             ->directory('avatars')
-            ->disk('public')
-            ->afterStateHydrated(function ($state, callable $set, callable $get, $record): void {
-                if ($record) {
-                    $record->avatar_url = $record->getFilamentAvatarUrl();
-                    $record->save();
-                }
-            });
+            ->disk('public');
     }
 }
